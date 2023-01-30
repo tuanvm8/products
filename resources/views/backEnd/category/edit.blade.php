@@ -24,11 +24,13 @@
         <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <form action="{{route('category.store')}}" method="POST">
+                <form action="{{route('category.update', $edit->id)}}" method="POST">
                     @csrf
+                    @method('PUT')
+
                     <div class="form-group">
                       <label>Tên danh mục</label>
-                      <input type="text" name="name" class="form-control"  placeholder="Nhập tên danh muc">
+                      <input type="text" name="name" value="{{old('name') ? old('name'):$edit->name}}" class="form-control"  placeholder="Nhập tên danh muc">
                       @if ($errors->has('name'))
                             <div class="error-validate text-danger">{{ $errors->first('name') }}</div>
                       @endif

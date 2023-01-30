@@ -43,7 +43,7 @@ class CategoryController extends Controller
         $category = new Category();
         $category->name = $request->name;
         $category->save();
-        return redirect()->route('category.index');
+        return redirect()->route('category.index')->with('success', 'Addd category successfully.');
     }
 
     /**
@@ -54,7 +54,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -65,7 +65,12 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        try{
+            $edit = Category::findOrFail($id);
+        }catch (\Exception $e){
+            return redirect()->route('category.index')->with('success', 'Không tìm thấy id !');
+        }
+        return view('backEnd.category.edit', compact('edit'));
     }
 
     /**
@@ -75,9 +80,13 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
-        //
+        $category = Category::find($id);
+        $data = $request->all();
+        $category->fill($data)->save();
+        return redirect()->route('category.index')->with('success', 'Cập nhật danh mục thành công !');
+
     }
 
     /**
@@ -88,6 +97,11 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = Category::find($id);
+
+        $delete->delete($id);
+        return redirect()->route('category.index')->with('success', 'Xóa thành công !!!');
+        
+
     }
 }
